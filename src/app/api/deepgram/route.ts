@@ -18,29 +18,24 @@ export async function GET() {
 
         // Auto-resolve Project ID if missing
         if (!projectId) {
-            const { result: projects, error: projectsError } = await deepgram.manage.getProjects();
-            if (projectsError) {
-                console.error("Deepgram Error: Could not list projects to find ID.", projectsError);
-                return NextResponse.json(
-                    { error: "DEEPGRAM_PROJECT_ID is missing and could not be auto-discovered. Please check your API Key permissions or set the variable manually." },
-                    { status: 500 }
-                );
-            }
-            if (projects?.projects?.[0]) {
-                projectId = projects.projects[0].project_id;
-            } else {
-                return NextResponse.json(
-                    { error: "No Deepgram Projects found for this API Key." },
-                    { status: 404 }
-                );
+            try {
+                const { result: projects, error: projectsError } = await deepgram.manage.getProjects();
+                if (projectsError) {
+                    console.warn("Deepgram Notice: Could not list projects with current key permissions. Falling back to primary API key for browser stream.");
+                    return NextResponse.json({ key: process.env.DEEPGRAM_API_KEY.trim() });
+                }
+                if (projects?.projects?.[0]) {
+                    projectId = projects.projects[0].project_id;
+                }
+            } catch (err) {
+                console.warn("Deepgram Notice: Management API unavailable. Falling back to primary API key.", err);
+                return NextResponse.json({ key: process.env.DEEPGRAM_API_KEY.trim() });
             }
         }
 
         if (!projectId) {
-            return NextResponse.json(
-                { error: "Could not determine Deepgram Project ID." },
-                { status: 500 }
-            );
+            // Fallback directly to using the primary API key
+            return NextResponse.json({ key: process.env.DEEPGRAM_API_KEY.trim() });
         }
 
         // Create a temporary key that lasts for 10 seconds

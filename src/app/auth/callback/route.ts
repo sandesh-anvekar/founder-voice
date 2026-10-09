@@ -17,9 +17,7 @@ export async function GET(request: NextRequest) {
 
         if (!error) {
             // Nuclear Option 2.0: Don't trust NODE_ENV. Check Host Header.
-            const host = request.headers.get('host') || ''
-            const isLocal = host.includes('localhost') || host.includes('127.0.0.1')
-            const origin = isLocal ? request.nextUrl.origin : 'https://founder-voice.vercel.app'
+            const origin = request.nextUrl.origin
 
             // Ensure next is a relative path
             const cleanNext = next.startsWith('/') ? next : '/pitch'

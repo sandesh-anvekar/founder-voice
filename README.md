@@ -87,6 +87,11 @@ After every session, you receive a detailed score (0-100) on:
    ```
    Open [http://localhost:3000](http://localhost:3000) in your browser.
 
+### 💡 Local Testing Gotchas
+
+- **Supabase Email Confirmation:** In your Supabase Dashboard → Authentication → Providers → Email, disable **'Confirm email'** for local dev so you can test login without waiting for activation emails.
+- **Microphone Access:** Modern browsers require HTTPS or `localhost` to allow microphone streaming (`navigator.mediaDevices`). Accessing your dev server from another device over local LAN IP (e.g. `http://192.168.x.x:3000`) without an SSL proxy will cause the browser to block microphone access.
+
 ## 🏗️ Architecture
 
 The system uses a **Hybrid Real-time Architecture**:

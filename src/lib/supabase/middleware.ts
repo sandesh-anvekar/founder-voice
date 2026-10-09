@@ -69,9 +69,7 @@ export async function updateSession(request: NextRequest) {
     } = await supabase.auth.getUser()
 
     // Nuclear Option 2.0: Don't trust NODE_ENV. Check Host Header.
-    const hostHeader = request.headers.get('host') || ''
-    const isLocal = hostHeader.includes('localhost') || hostHeader.includes('127.0.0.1')
-    const origin = isLocal ? request.nextUrl.origin : 'https://founder-voice.vercel.app'
+    const origin = request.nextUrl.origin
 
     // PROTECTED ROUTES LOGIC
     // If user is NOT signed in and trying to access /pitch or /dashboard, redirect to /login

@@ -20,7 +20,6 @@ type SessionStatus = 'IDLE' | 'PITCHING' | 'ANALYZING' | 'COMPLETED' | 'ERROR';
 
 import { VoiceSettings, VoiceMode } from "@/components/war-room/VoiceSettings";
 import { MessageSquare } from "lucide-react";
-import { useAuth } from "@/components/auth/AuthProvider";
 
 export default function PitchSessionPage() {
     const [status, setStatus] = useState<SessionStatus>('IDLE');
@@ -29,7 +28,6 @@ export default function PitchSessionPage() {
     const [activeClaim, setActiveClaim] = useState<string | null>(null);
     const [voiceMode, setVoiceMode] = useState<VoiceMode>('patient'); // Default to Patient Mode
     const [contextLabel, setContextLabel] = useState<string>("Previous Context");
-    const { signOut } = useAuth();
 
     useEffect(() => {
         const storedContext = sessionStorage.getItem('founder_voice_context');
@@ -234,9 +232,11 @@ export default function PitchSessionPage() {
                         <span className="font-mono text-sm">{isConnected ? 'ONLINE' : 'OFFLINE'}</span>
                     </div>
 
-                    <Button variant="ghost" size="sm" onClick={() => signOut()} className="text-muted-foreground hover:text-white ml-2">
-                        Log Out
-                    </Button>
+                    <Link href="/">
+                        <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-white ml-2">
+                            Exit
+                        </Button>
+                    </Link>
                 </div>
             </div>
 

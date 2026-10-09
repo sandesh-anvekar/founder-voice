@@ -54,12 +54,7 @@ export function IdeaGenerator() {
     const { user } = useAuth(); // Get User State
 
     const handleLaunch = () => {
-        if (user) {
-            router.push('/pitch');
-        } else {
-            // Redirect to Login but tell it to come back to /pitch
-            router.push('/login?next=/pitch');
-        }
+        router.push('/pitch');
     };
 
     return (
